@@ -6,11 +6,13 @@ export class GremlinService implements OnModuleInit, OnModuleDestroy {
   dc: gremlin.driver.DriverRemoteConnection
   g: gremlin.process.GraphTraversalSource<gremlin.process.GraphTraversal>
   constructor () {
-    this.dc = new gremlin.driver.DriverRemoteConnection('ws://localhost:8182/gremlin', {});
+    const DriverRemoteConnection = gremlin.driver.DriverRemoteConnection;
+    this.dc = new DriverRemoteConnection('ws://localhost:8182/gremlin', {});
   }
 
   async onModuleInit() {
-    const graph = new gremlin.structure.Graph();
+    const Graph = gremlin.structure.Graph;
+    const graph = new Graph();
     this.g = graph.traversal().withRemote(this.dc);
   }
 
