@@ -1,6 +1,4 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { ProcessModel } from "./process.model";
-import { ProjectModel } from "./project.model";
+import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class ProcessFlowModel {
@@ -10,12 +8,9 @@ export class ProcessFlowModel {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => ProjectModel)
-  project: ProjectModel;
+  @Field((type) => Int)
+  projectId: number;
 
-  @Field((type) => ProcessModel)
-  start: ProcessModel;
-
-  @Field((type) => [ProcessModel], { defaultValue: [] })
-  processes: ProcessModel[];
+  @Field((type) => Int)
+  startProcessId: number;
 }
