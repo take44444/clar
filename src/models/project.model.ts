@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { MemberModel } from "./member.model";
+import { RoleModel } from "./role.model";
 
 @ObjectType()
 export class ProjectModel {
@@ -9,6 +9,6 @@ export class ProjectModel {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => [MemberModel], { defaultValue: [] })
-  members: MemberModel[];
+  @Field((type) => [RoleModel], { defaultValue: [] })
+  roles: RoleModel[];
 }

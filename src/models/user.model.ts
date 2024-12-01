@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { TaskRefModel } from "./task-ref.model";
-import { RoleRefModel } from "./role-ref.model";
+import { TaskModel } from "./task.model";
+import { RoleModel } from "./role.model";
 
 @ObjectType()
 export class UserModel {
@@ -10,9 +10,9 @@ export class UserModel {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => [RoleRefModel], { defaultValue: [] })
-  roles: RoleRefModel[];
+  @Field((type) => [RoleModel], { defaultValue: [] })
+  roles: RoleModel[];
 
-  @Field((type) => [TaskRefModel], { defaultValue: [] })
-  tasks: TaskRefModel[];
+  @Field((type) => [TaskModel], { defaultValue: [] })
+  tasks: TaskModel[];
 }

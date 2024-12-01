@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { RoleRefModel } from "./role-ref.model";
-import { ProcessRefModel } from "./process-ref.model";
+import { TaskModel } from "./task.model";
 
 @ObjectType()
 export class ProcessModel {
@@ -10,12 +9,6 @@ export class ProcessModel {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => [ProcessRefModel], { defaultValue: [] })
-  from: ProcessRefModel[];
-
-  @Field((type) => [ProcessRefModel], { defaultValue: [] })
-  to: ProcessRefModel[];
-
-  @Field((type) => [RoleRefModel], { defaultValue: [] })
-  users: RoleRefModel[];
+  @Field((type) => [TaskModel], { defaultValue: [] })
+  from: TaskModel[];
 }
