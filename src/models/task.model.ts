@@ -1,16 +1,18 @@
-import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { ProcessModel } from "./process.model";
+import { UserModel } from "./user.model";
 
 @ObjectType()
 export class TaskModel {
   @Field((type) => ID)
-  id: number;
+  id?: number;
 
   @Field((type) => String)
-  name: string;
+  name?: string;
 
-  @Field((type) => Int)
-  processId: number;
+  @Field((type) => ProcessModel)
+  process?: ProcessModel;
 
-  @Field((type) => Int)
-  userId: number;
+  @Field((type) => [UserModel])
+  user?: UserModel[];
 }

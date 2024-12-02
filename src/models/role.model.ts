@@ -1,16 +1,22 @@
-import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { ProcessModel } from "./process.model";
+import { ProjectModel } from "./project.model";
+import { UserModel } from "./user.model";
 
 @ObjectType()
 export class RoleModel {
   @Field((type) => ID)
-  id: number;
+  id?: number;
 
   @Field((type) => String)
-  name: string;
+  name?: string;
 
-  @Field((type) => Int)
-  projectId: number;
+  @Field((type) => ProjectModel)
+  project?: ProjectModel;
 
-  @Field((type) => Int)
-  userId: number;
+  @Field((type) => [ProcessModel])
+  process?: ProcessModel[];
+
+  @Field((type) => [UserModel])
+  user?: UserModel[];
 }
