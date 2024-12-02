@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
+    "@jenyus-org/graphql-utils": "^1.5.0",
+    "@jenyus-org/nestjs-graphql-utils": "^1.6.4",
     "@nestjs/apollo": "^12.2.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
