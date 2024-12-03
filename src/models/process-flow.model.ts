@@ -10,7 +10,7 @@ export class ProcessFlowModel {
   @Field((type) => String)
   name?: string;
 
-  @Field((type) => [ProjectModel])
+  @Field((type) => [ProcessModel])
   process?: ProcessModel[];
 
   @Field((type) => ProjectModel)
