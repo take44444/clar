@@ -3,13 +3,12 @@ import { ProjectModel } from "@/models/project.model";
 import { ProjectService } from "@/services/project.service";
 import { FieldMap } from "@jenyus-org/graphql-utils";
 import { FieldMap as InfoMap } from "@jenyus-org/nestjs-graphql-utils";
-import { Inject } from "@nestjs/common";
 import { Args, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 
 @Resolver((of) => ProjectModel)
 export class ProjectResolver {
   constructor(
-    @Inject(ProjectService) private projectService: ProjectService
+    private projectService: ProjectService
   ) {}
 
   @Query((returns) => ProjectModel, { nullable: true })
