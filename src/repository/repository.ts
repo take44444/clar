@@ -40,15 +40,23 @@ export class GraphTraversalRepository<M> {
     this.gremlinRepository.g.V().drop();
 
     const id: number = (await this.gremlinRepository.g
-      .addV('project').property('name','clar').elementMap().next()
+      .addV('project').property('name','Lipsum').elementMap().next()
     ).value.get(gremlin.process.t.id);
 
     await this.gremlinRepository.g
-      .V(id).as('p')
-      .addV('role').property('name','Product Owner').as('r1').addV('role').property('name','Business Analyst').as('r2').addV('role').property('name','Architecture').as('r3')
+      .V(id).as('pj')
+      .addV('role').property('name','Developer').as('r1').addV('role').property('name','Business Analyst').as('r2').addV('role').property('name','Architecture').as('r3')
       .addV('user').property('name','Alice').as('u1').addV('user').property('name','Bob').as('u2').addV('user').property('name','Charlie').as('u3')
-      .addE('has').from_('p').to('r1').addE('has').from_('p').to('r2').addE('has').from_('p').to('r3')
-      .addE('assigned').from_('u1').to('r1').addE('assigned').from_('u2').to('r2').addE('assigned').from_('u3').to('r2')
+      .addV('processFlow').property('name','Process flow').as('pf1')
+      .addV('process').property('name','Feasibility check').as('p1').addV('process').property('name','Create basic design').as('p2').addV('process').property('name','Create detail design').as('p3').addV('process').property('name','Development').as('p4').addV('process').property('name','Test').as('p5')
+      .addV('task').property('name', 'Implement User Service.').as('t1').addV('task').property('name', 'Implement Repository for backend with GraphDB.').as('t2').addV('task').property('name', 'Make UI design.').as('t3').addV('task').property('name', 'Design data model for backend.').as('t4').addV('task').property('name', 'Implement Resolvers for GraphQL Queries.').as('t5').addV('task').property('name', 'Implement Resolvers for GraphQL Mutations.').as('t6').addV('task').property('name', 'Create front-end.').as('t7')
+      .addE('with').from_('pj').to('pf1')
+      .addE('has').from_('pf1').to('p1').addE('has').from_('pf1').to('p2').addE('has').from_('pf1').to('p3').addE('has').from_('pf1').to('p4').addE('has').from_('pf1').to('p5')
+      .addE('assined').from_('r2').to('p1').addE('assined').from_('r1').to('p2').addE('assined').from_('r1').to('p3').addE('assined').from_('r3').to('p4').addE('assined').from_('r2').to('p5')
+      .addE('has').from_('pj').to('r1').addE('has').from_('pj').to('r2').addE('has').from_('pj').to('r3')
+      .addE('assigned').from_('u1').to('t1').addE('assigned').from_('u1').to('t3').addE('assigned').from_('u1').to('t6').addE('assigned').from_('u2').to('t4').addE('assigned').from_('u2').to('t7').addE('assigned').from_('u3').to('t2').addE('assigned').from_('u3').to('t5')
+      .addE('assigned').from_('u1').to('r1').addE('assigned').from_('u2').to('r2').addE('assigned').from_('u3').to('r2').addE('assigned').from_('u1').to('r3')
+      .addE('in').from_('t1').to('p2').addE('in').from_('t2').to('p3').addE('in').from_('t3').to('p4').addE('in').from_('t4').to('p1').addE('in').from_('t5').to('p2').addE('in').from_('t6').to('p5').addE('in').from_('t7').to('p3')
       .next();
 
     ret.push(id);
@@ -83,6 +91,8 @@ export class GraphTraversalRepository<M> {
           case "name":
             qm.set("name", new Map([["@traversal", "name"]]));
             break;
+          case "__typename":
+            break;
           default:
             const qmC: Map<string, any> = new Map();
             qm.set(key, qmC);
@@ -95,7 +105,10 @@ export class GraphTraversalRepository<M> {
         if (!stack.length) gt = graphTraversal;
         else gt = gremlin.process.statics.both().hasLabel(label);
         gt = gt.project(...qm.keys());
-        for (const key in fm) gt = gt.by(qm.get(key).get("@traversal"));
+        for (const key in fm) {
+          if (key == "__typename") continue;
+          gt = gt.by(qm.get(key).get("@traversal"));
+        }
         qm.set("@traversal", gt.fold());
       }
     }
@@ -242,6 +255,14 @@ export class GraphTraversalRepository<M> {
             const role = new RoleModel();
             m.role = role;
             stack.push([entry[1][0], role]);
+            break;
+          case "task":
+            m.task = [];
+            for (const task_data of entry[1]) {
+              const task = new TaskModel();
+              m.task.push(task);
+              stack.push([task_data, task]);
+            }
             break;
           default:
             throw new Error("Unexpected error!");
